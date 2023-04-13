@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::resource('students', 'App\Http\Controllers\StudentController');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    // Admin-only routes here
+});
