@@ -21,3 +21,6 @@ Route::resource('students', 'App\Http\Controllers\StudentController');
 Route::middleware(['auth', 'admin'])->group(function () {
     // Admin-only routes here
 });
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

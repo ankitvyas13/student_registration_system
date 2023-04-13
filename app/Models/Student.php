@@ -11,5 +11,5 @@ class Student extends Model
 
     protected $table = 'menus';
     
-    protected $fillable = ['id','name','slug','parent_id','created_at','updated_at'];
+    protected $fillable = ['id','name','bod','photo','address'];
 }

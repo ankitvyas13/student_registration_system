@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Student;
 
 class StudentController extends Controller
 {
@@ -13,7 +14,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $students = Student::all();
+        return view('students.index', compact('students'));
     }
 
     /**
@@ -23,7 +25,7 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+        return view('students.create');
     }
 
     /**
@@ -34,7 +36,16 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|unique:students,email',
+            'phone_number' => 'required',
+        ]);
+
+        Student::create($request->all());
+
+        return redirect()->route('students.index')
+            ->with('success', 'Student created successfully.');
     }
 
     /**
@@ -45,7 +56,7 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('students.show', compact('student'));
     }
 
     /**
@@ -56,7 +67,7 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('students.edit', compact('student'));
     }
 
     /**
@@ -66,9 +77,18 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, Student $student)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|unique:students,email,' . $student->id,
+            'phone_number' => 'required',
+        ]);
+
+        $student->update($request->all());
+
+        return redirect()->route('students.index')
+            ->with('success', 'Student updated successfully.');
     }
 
     /**
@@ -77,8 +97,12 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Student $student)
     {
         //
+        $student->delete();
+
+        return redirect()->route('students.index')
+            ->with('success', 'Student deleted successfully.');
     }
 }
